@@ -1,23 +1,33 @@
-NAME = libft.a
-
-SRC = ft_bzero.c \
-	ft_isdigit.c \
-	ft_calloc.c \
-
-OBJ = $(SRC:.c=.o)
+NAME	= push_swap
+SRCS	= $(wildcard ./*.c) \
+		$(wildcard assistant_functions/*.c) \
+		$(wildcard control_functions/*.c) \
+		$(wildcard instructions_functions/*.c) \
+		$(wildcard sorting_algorithms/*.c)
+OBJS	= $(SRCS:.c=.o)
+CFLAGS	= -Wall -Wextra -Werror
+PF		= ft_printf/libftprintf.a
+LBFT	= libft/libft.a
 
 all: $(NAME)
 
-$(NAME): $(OBJ)
-	ar -rcs $(NAME) $(OBJ)
-	gcc -Wall -Wextra -Werror -c $(SRC)
+$(NAME): $(OBJS) $(PF) $(LBFT)
+	gcc $(CFLAGS) $(LBFT) $(PF) $(OBJS) -o $(NAME)
+
+$(LBFT):
+	make -C ./libft
+
+$(PF):
+	make -C ./ft_printf
 
 clean:
-	rm -rf $(OBJ)
-	
+	make -C ./ft_printf fclean
+	make -C ./libft fclean
+	rm -rf $(OBJS)
+
 fclean: clean
-	rm -rf $(NAME)
+	rm -rf push_swap
 
 re: fclean all
-	
+
 .PHONY: clean fclean re all
